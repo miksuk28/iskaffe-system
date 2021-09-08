@@ -2,7 +2,6 @@ from flask import json, make_response, abort
 from flask import jsonify
 from datetime import datetime
 import other_funcs as funcs
-from random import choice
 import hashlib, uuid
 # imports related to database
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float
