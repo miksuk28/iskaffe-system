@@ -1,14 +1,13 @@
 from flask import json, make_response, abort
 from flask import jsonify
 from datetime import datetime
-import actions as act
+import other_funcs as funcs
 from random import choice
 import hashlib, uuid
 # imports related to database
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float
 from sqlalchemy.sql.expression import null
 
-ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 engine = create_engine("sqlite:///iskaffe_db.db", echo=True, connect_args={"check_same_thread":False})
 meta = MetaData()
@@ -40,13 +39,6 @@ def read_one(device_id):
         abort(404, f"Device ID: {device_id} does not exist")
     '''
 
-def generate_salt(length=16):
-    salt = []
-    for i in range(length):
-        salt.append(choice(ALPHABET))
-
-    return "".join(salt)
-
 def add_user(user):
     fname = user.get("fname")
     lname = user.get("lname")
@@ -55,7 +47,7 @@ def add_user(user):
 
     if None not in (fname, lname, password, username):
         # act.create_user(fname, lname, username, password)
-        salt = generate_salt()
+        salt = funcs.generate_salt()
 
         pasword_salt = password + salt
         hashed_password = hashlib.sha512(pasword_salt.encode("utf-8")).hexdigest()
