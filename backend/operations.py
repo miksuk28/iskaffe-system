@@ -7,7 +7,7 @@ import hashlib, uuid
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, Float
 from sqlalchemy.sql.expression import null
 
-# create the engine instance. Apparently, it runs in a seperate thread, which Sqlalchemy really doesn't like ¯\_(ツ)_/¯ 
+# check_same_thread = False, so Sqlalchemy doesn't get angery ¯\_(ツ)_/¯ 
 engine = create_engine("sqlite:///iskaffe_db.db", echo=True, connect_args={"check_same_thread":False})
 meta = MetaData()
 conn = engine.connect()
