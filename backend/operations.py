@@ -22,21 +22,6 @@ users = Table(
     Column("password", String, nullable=False)
 )
 
-def read_one(device_id):
-    """
-    This function gets run when /api/alarms/{device_id} is run,
-    and returns the relevant alarms for that device, if they exist
-
-    :param device_id:   ID of device to fetch alarms
-    :return:            200 on success, 404 if not found
-    """
-    '''
-    # Check if device_id exists
-    if device_id in ALARMS.keys():
-        return jsonify(ALARMS[device_id])
-    else:
-        abort(404, f"Device ID: {device_id} does not exist")
-    '''
 
 def add_user(user):
     fname = user.get("fname")
