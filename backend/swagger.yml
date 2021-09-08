@@ -1,0 +1,55 @@
+swagger: "2.0"
+info:
+  description: This is the swagger file that goes with our server code
+  version: "1.0.0"
+  title: Swagger Rest Article
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+paths:
+  /adduser:
+    post:
+      operationId: operations.add_user
+      tags:
+        - User
+      summary: Creates a new user with a balance of 0
+      description: Create new user
+      parameters:
+        - name: user
+          in: body
+          description: User to add
+          required: True
+          schema:
+            type: object
+            properties:
+              username:
+                type: string
+                description: Username to sign in with
+              fname:
+                type: string
+                description: First name of user to add
+              lname:
+                type: string
+                description: Last name of user to add
+              password:
+                type: string
+                description: Password to be used to log in to account
+
+      responses:
+        201:
+          description: Successfully created person
+          schema:
+            properties:
+              fname:
+                type: string
+                description: First name of user
+              lname: 
+                type: string
+                description: Last name of user
+              username:
+                type: string
+                description: Username of the user
