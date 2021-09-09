@@ -11,8 +11,9 @@ def create_user():
     if request.method == "POST":
         posted_data = request.get_json()
         
+        # checks if all fields are there and are not None
         if not ops.validate(("fname", "lname", "username", "password"), posted_data):
-            abort(400, {"message": "Bad request"})
+            abort(400, "Bad request")
         else:
             if not ops.user_exists(posted_data["username"]):
                 ops.add_user(posted_data)
@@ -25,6 +26,7 @@ def create_user():
             else:
                 # if user already exists
                 abort(409, f"User {posted_data['username']} already exists")
+
 
 
 if __name__ == "__main__":
