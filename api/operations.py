@@ -1,11 +1,15 @@
 from random import choice
+import hashlib, uuid
 # TinyDB
 from tinydb import TinyDB, Query
 
 users_db = TinyDB("users.json")
 
-CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!#¤%&/()=?-.,"
+ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+SYMBOLS = "!#¤%&/()=?-.,"
+CHARS = ALPHABET + SYMBOLS
 
+tokens = []
 
 def validate(keys, dict):
     '''
@@ -35,7 +39,48 @@ def user_exists(user, db=users_db):
 
     '''
     User = Query()
-    return users_db.search(User.username == user)
+    return db.search(User.username == user)
+
+
+def hash_password(password, salt=""):
+    '''
+    Concatenates the password and salt
+    and hashes it
+
+    :param password:    password to hash
+    :salt:              salt to add to password
+    :return:            hash of password + salt
+    '''
+    salted_pass = password + salt
+
+    hashed_string = hashlib.sha256(salted_pass.encode("utf-8")).hexdigest()
+    return hashed_string
+
+
+def compare_password(username, raw_password, db=users_db):
+    User = Query()
+    user = db.search(User.username == username)
+    user = user[0]
+
+    hashed = hash_password(raw_password, user["salt"])
+
+    if hashed == user["password"]:
+        return True
+    else:
+        return False
+
+
+def generate_token(username):
+    user_token = []
+    for i in range(20):
+        user_token.append(choice(ALPHABET))
+
+    user_token = "".join(user_token)
+
+    token_entry = {"username" : username, "token" : user_token}
+    tokens.append(token_entry)
+
+    return user_token
 
 
 def generate_salt(length=16):
@@ -51,6 +96,16 @@ def generate_salt(length=16):
 
     return "".join(salt)
 
+
 def add_user(user, db=users_db):
-    new_user = {"fname": user["fname"], "lname": user["lname"], "username": user["username"], "password": user["password"]}
-    users_db.insert(new_user)
+    '''
+    Generates salt, hashed password
+    and adds user to the database
+
+    :param user:    user dict
+    '''
+    salt = generate_salt()
+    password = hash_password(user["password"], salt)
+
+    new_user = {"fname": user["fname"], "lname": user["lname"], "username": user["username"], "password": password, "salt": salt}
+    db.insert(new_user)
