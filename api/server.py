@@ -1,4 +1,4 @@
-from flask import Flask, json, jsonify, request, abort
+from flask import Flask, jsonify, request, abort
 # non-flask endpoints hidden away in seperate file
 import operations as ops
 
@@ -62,7 +62,19 @@ def auth():
 @app.route("/deauth", methods=["POST"])
 def sign_out():
     if request.method == "POST":
-        return
+        posted_data = request.get_json()
+
+        if ops.validate(("token"), posted_data):
+            if ops.token_exists(posted_data["token"]):
+                ops.delete_tokens(posted_data["token"])
+
+                return jsonify({"message": "You have been signed out"})
+            else:
+                # token does not exist
+                abort(404, f"Token {posted_data['token']} does not exist")
+        else:
+            print(posted_data)
+            abort(400)
     else:
         # method not allowed
         abort(405)

@@ -69,6 +69,19 @@ def compare_password(username, raw_password, db=users_db):
     else:
         return False
 
+def token_exists(token):
+    for token in tokens:
+        if token["token"] == token:
+            return True
+
+    return False
+
+
+def delete_tokens(token):
+    for i in range(len(tokens)):
+        if tokens[i]["token"] == token:
+            del tokens[i]
+
 
 def generate_token(username):
     user_token = []
