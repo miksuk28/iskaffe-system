@@ -78,8 +78,15 @@ def generate_token(username):
     user_token = "".join(user_token)
 
     token_entry = {"username" : username, "token" : user_token}
+    
+    for i in range(len(tokens)):
+        if tokens[i]["username"] == username:
+            print(f"Removing old token for {username}")
+            del tokens[i]
+
     tokens.append(token_entry)
 
+    print(tokens)
     return user_token
 
 

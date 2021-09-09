@@ -1,4 +1,3 @@
-from os import abort
 from flask import Flask, json, jsonify, request, abort
 # non-flask endpoints hidden away in seperate file
 import operations as ops
@@ -39,10 +38,11 @@ def auth():
         posted_data = request.get_json()
 
         if ops.validate(("username", "password"), posted_data):
-            if user_exists(posted_data["username"]):
+            if ops.user_exists(posted_data["username"]):
                 if ops.compare_password(posted_data["username"], posted_data["password"]):
                     token = ops.generate_token(posted_data["username"])
 
+                    print(f"Token {token} generated for {posted_data['username']}")
                     return jsonify({"username": posted_data["username"], "token": token})
                 else:
                     # unauthorized
@@ -58,6 +58,14 @@ def auth():
         # method not allowed
         abort(405)
 
+
+@app.route("/deauth", methods=["POST"])
+def sign_out():
+    if request.method == "POST":
+        return
+    else:
+        # method not allowed
+        abort(405)
 
 if __name__ == "__main__":
     app.run(debug=True)
