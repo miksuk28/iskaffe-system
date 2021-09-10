@@ -11,6 +11,7 @@ CHARS = ALPHABET + SYMBOLS
 
 tokens = []
 
+
 def validate(keys, dict):
     '''
     Checks if keys exist in dict,
@@ -77,6 +78,7 @@ def compare_password(username, raw_password, db=users_db):
         return True
     else:
         return False
+
 
 def token_exists(token):
     '''
