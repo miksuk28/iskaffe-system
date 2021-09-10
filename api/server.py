@@ -64,7 +64,7 @@ def sign_out():
     if request.method == "POST":
         posted_data = request.get_json()
 
-        if ops.validate(("token"), posted_data):
+        if ops.validate(["token"], posted_data):
             if ops.token_exists(posted_data["token"]):
                 ops.delete_tokens(posted_data["token"])
 
