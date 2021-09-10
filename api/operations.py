@@ -58,6 +58,15 @@ def hash_password(password, salt=""):
 
 
 def compare_password(username, raw_password, db=users_db):
+    '''
+    Adds the salt to the password
+    and compares the hash to the one
+    in the db
+    
+    :param username:    password of user to check
+    :raw_password:      unhashed password entered by user
+    :return:            True on matching hashes, False otherwise
+    '''
     User = Query()
     user = db.search(User.username == username)
     user = user[0]
@@ -70,6 +79,13 @@ def compare_password(username, raw_password, db=users_db):
         return False
 
 def token_exists(token):
+    '''
+    Cycles through list of tokens
+    and checks if token is there
+    
+    :param token:      token to check
+    :return:           True if token exists, else: False
+    '''
     for token in tokens:
         if token["token"] == token:
             return True
@@ -78,12 +94,24 @@ def token_exists(token):
 
 
 def delete_tokens(token):
+    '''
+    Deletes a single token
+    
+    :param token:       token key to delete
+    '''
     for i in range(len(tokens)):
         if tokens[i]["token"] == token:
             del tokens[i]
 
 
 def generate_token(username):
+    '''
+    Generates an access token for
+    a user and adds it to the tokens list
+    
+    :param username:    user to generate token for
+    :return:            generated token
+    '''
     user_token = []
     for i in range(20):
         user_token.append(choice(ALPHABET))
