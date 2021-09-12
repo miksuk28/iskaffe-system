@@ -102,4 +102,5 @@ def get_ip():
         abort(405)
 
 if __name__ == "__main__":
+    ops.log_action("----- SERVER STARTED -----")
     app.run(debug=True, host="0.0.0.0")
