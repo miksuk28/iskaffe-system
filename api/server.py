@@ -19,6 +19,7 @@ def create_user():
             if not ops.user_exists(posted_data["username"]):
                 ops.add_user(posted_data)
 
+                ops.log_action(f"{request.remote_addr} - /create_user - user {posted_data['username']} created")
                 # returns fname, lname and username as json
                 return jsonify({"fname": posted_data["fname"],
                     "lname": posted_data["lname"],
