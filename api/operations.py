@@ -1,16 +1,19 @@
 from random import choice
-import hashlib, uuid
+import hashlib
+import uuid
 from datetime import datetime
 # TinyDB
 from tinydb import TinyDB, Query
 
 users_db = TinyDB("users.json")
 
+
 ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 SYMBOLS = "!#¤%&/()=?-.,"
 CHARS = ALPHABET + SYMBOLS
 
 tokens = []
+
 
 def get_time():
     now = datetime.now()
@@ -74,7 +77,7 @@ def compare_password(username, raw_password, db=users_db):
     Adds the salt to the password
     and compares the hash to the one
     in the db
-    
+
     :param username:    password of user to check
     :raw_password:      unhashed password entered by user
     :return:            True on matching hashes, False otherwise
@@ -95,7 +98,7 @@ def token_exists(token):
     '''
     Cycles through list of tokens
     and checks if token is there
-    
+
     :param token:      token to check
     :return:           True if token exists, else: False
     '''
@@ -109,7 +112,7 @@ def token_exists(token):
 def delete_tokens(token):
     '''
     Deletes a single token
-    
+
     :param token:       token key to delete
     '''
     for i in range(len(tokens)):
@@ -121,7 +124,7 @@ def generate_token(username):
     '''
     Generates an access token for
     a user and adds it to the tokens list
-    
+
     :param username:    user to generate token for
     :return:            generated token
     '''
@@ -131,8 +134,8 @@ def generate_token(username):
 
     user_token = "".join(user_token)
 
-    token_entry = {"username" : username, "token" : user_token}
-    
+    token_entry = {"username": username, "token": user_token}
+
     for i in range(len(tokens)):
         if tokens[i]["username"] == username:
             print(f"Removing old token for {username}")
@@ -168,5 +171,6 @@ def add_user(user, db=users_db):
     salt = generate_salt()
     password = hash_password(user["password"], salt)
 
-    new_user = {"fname": user["fname"], "lname": user["lname"], "username": user["username"], "password": password, "salt": salt}
+    new_user = {"fname": user["fname"], "lname": user["lname"],
+                "username": user["username"], "password": password, "salt": salt}
     db.insert(new_user)
