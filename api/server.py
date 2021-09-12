@@ -13,6 +13,7 @@ def create_user():
         
         # checks if all fields are there and are not None
         if not ops.validate(("fname", "lname", "username", "password"), posted_data):
+            ops.log_action(f"{request.remote_addr} - /create_user - bad request")
             abort(400)
         else:
             if not ops.user_exists(posted_data["username"]):
@@ -25,9 +26,11 @@ def create_user():
                 )
             else:
                 # if user already exists
+                ops.log_action(f"{request.remote_addr} - /create_user - user {posted_data['username']} already exists")
                 abort(409, f"User {posted_data['username']} already exists")
     else:
         # method not allowed
+        ops.log_action(f"{request.remote_addr} - /create_user - method not allowed")
         abort(405)
 
 
@@ -43,15 +46,19 @@ def auth():
                     token = ops.generate_token(posted_data["username"])
 
                     print(f"Token {token} generated for {posted_data['username']}")
+                    ops.log_action(f"{request.remote_addr} - /auth - token generated for {posted_data['username']}")
                     return jsonify({"username": posted_data["username"], "token": token})
                 else:
                     # unauthorized
+                    ops.log_action(f"{request.remote_addr} - /auth - unauthorized")
                     abort(401)
             else:
                 # user not found
+                ops.log_action(f"{request.remote_addr} - /auth - {posted_data['username']} not found")
                 abort(404, f"user {posted_data['username']} not found")
         else:
             # bad request
+            ops.log_action(f"{request.remote_addr} - /auth - bad request")
             abort(400)
 
     else:
@@ -68,15 +75,19 @@ def sign_out():
             if ops.token_exists(posted_data["token"]):
                 ops.delete_tokens(posted_data["token"])
 
+                ops.log_action(f"{request.remote_addr} - /deauth - signed out")
                 return jsonify({"message": "You have been signed out"})
             else:
                 # token does not exist
+                ops.log_action(f"{request.remote_addr} - /deauth - token does not exist")
                 abort(404, f"Token {posted_data['token']} does not exist")
         else:
             print(posted_data)
+            ops.log_action(f"{request.remote_addr} - /deauth - bad request")
             abort(400)
     else:
         # method not allowed
+        ops.log_action(f"{request.remote_addr} - /deauth - method not allowed")
         abort(405)
 
 
