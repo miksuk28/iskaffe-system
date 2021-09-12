@@ -79,5 +79,15 @@ def sign_out():
         # method not allowed
         abort(405)
 
+
+@app.route("/get_ip", methods=["GET"])
+def get_ip():
+    if request.method == "GET":
+        ops.log_action(f"{request.remote_addr} - /get_ip")
+        return jsonify({"ip": request.remote_addr})
+
+    else:
+        abort(405)
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")

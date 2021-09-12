@@ -1,5 +1,6 @@
 from random import choice
 import hashlib, uuid
+from datetime import datetime
 # TinyDB
 from tinydb import TinyDB, Query
 
@@ -10,6 +11,16 @@ SYMBOLS = "!#¤%&/()=?-.,"
 CHARS = ALPHABET + SYMBOLS
 
 tokens = []
+
+def get_time():
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
+    return dt_string
+
+
+def log_action(string):
+    with open("log.txt", "a") as file:
+        file.write(f"\n{get_time()} - {string}")
 
 
 def validate(keys, dict):
