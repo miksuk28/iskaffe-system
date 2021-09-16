@@ -92,8 +92,7 @@ def sign_out():
                 return jsonify({"message": "You have been signed out"})
             else:
                 # token does not exist
-                ops.log_action(
-                    f"{ip} - /deauth - token does not exist")
+                ops.log_action(f"{ip} - /deauth - token does not exist")
                 abort(404, f"Token {posted_data['token']} does not exist")
         else:
             print(posted_data)
