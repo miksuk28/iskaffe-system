@@ -104,6 +104,7 @@ def sign_out():
 def get_ip():
     if request.method == "GET":
         ops.log_action(f"{request.remote_addr} - /get_ip")
+        print(request.headers)
         return jsonify({"ip": request.remote_addr})
 
     else:
