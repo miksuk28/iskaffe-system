@@ -1,3 +1,9 @@
+'''
+File is not very tidy
+Could benefit from separating functions
+into more modules
+'''
+
 from random import choice
 import hashlib
 import uuid
@@ -12,6 +18,7 @@ ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 SYMBOLS = "!#¤%&/()=?-.,"
 CHARS = ALPHABET + SYMBOLS
 
+# to be changed to a dict
 tokens = []
 
 
@@ -102,7 +109,7 @@ def compare_password(username, raw_password, db=users_db):
     else:
         return False
 
-
+'''To be deprecated soon'''
 def token_exists(token):
     '''
     Cycles through list of tokens
@@ -117,7 +124,7 @@ def token_exists(token):
 
     return False
 
-
+'''To be decrecated soon'''
 def delete_tokens(token):
     '''
     Deletes a single token
