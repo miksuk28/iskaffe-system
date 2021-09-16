@@ -15,6 +15,15 @@ CHARS = ALPHABET + SYMBOLS
 tokens = []
 
 
+def get_ip(headers):
+    try:
+        ip = headers["X-Real-IP"]
+    except KeyError:
+        ip = "NO IP HEADER"
+
+    return ip
+
+
 def get_time():
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")

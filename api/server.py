@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route("/create_user", methods=["POST"])
 def create_user():
-    ip = request.headers["X-Real-IP"]
+    ip = get_ip(request.headers)
     if request.method == "POST":
         posted_data = request.get_json()
 
@@ -42,7 +42,7 @@ def create_user():
 
 @app.route("/auth", methods=["POST"])
 def auth():
-    ip = request.headers["X-Real-IP"]
+    ip = get_ip(request.headers)
 
     if request.method == "POST":
         posted_data = request.get_json()
@@ -79,7 +79,7 @@ def auth():
 
 @app.route("/deauth", methods=["POST"])
 def sign_out():
-    ip = request.headers["X-Real-IP"]
+    ip = get_ip(request.headers)
 
     if request.method == "POST":
         posted_data = request.get_json()
@@ -108,7 +108,7 @@ def sign_out():
 @app.route("/get_ip", methods=["GET"])
 def get_ip():
     if request.method == "GET":
-        ip = request.headers["X-Real-IP"]
+        ip = get_ip(request.headers)
         ops.log_action(f"{ip} - /get_ip")
         print(ip)
         return jsonify({"ip": ip})
