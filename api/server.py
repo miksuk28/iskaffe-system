@@ -109,12 +109,29 @@ def sign_out():
 def get_ip():
     if request.method == "GET":
         ip = get_ip(request.headers)
+        
         ops.log_action(f"{ip} - /get_ip")
         print(ip)
         return jsonify({"ip": ip})
 
     else:
         abort(405)
+
+
+@app.route("/get_balance", methods=["GET"])
+def get_balance():
+    if request.method == "GET":
+        token = request.args.get("token")
+
+        if token == "" or token == None:
+            print("No token provided")
+            abort(405, "No token provided")
+        else:
+            print(token)
+
+        return jsonify({"token": token})
+    else:
+        abort(405, message="Method not allowed")
 
 
 if __name__ == "__main__":
