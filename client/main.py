@@ -83,6 +83,8 @@ def register_user():
 
                     if registration_status == "OK":
                         sg.popup("User successfully created. You may now sign in", title="User Created", keep_on_top=True)
+                        window.close()
+                        login_window()
                         break
                     else:
                         sg.popup(registration_status, title="Error", keep_on_top=True)
