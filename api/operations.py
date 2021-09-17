@@ -7,7 +7,7 @@ into more modules
 from random import choice
 import hashlib
 import uuid
-from datetime import datetime
+import datetime
 # TinyDB
 from tinydb import TinyDB, Query
 
@@ -19,7 +19,7 @@ SYMBOLS = "!#¤%&/()=?-.,"
 CHARS = ALPHABET + SYMBOLS
 
 # to be changed to a dict
-tokens = []
+tokens = {}
 
 
 def get_ip(headers):
@@ -32,7 +32,7 @@ def get_ip(headers):
 
 
 def get_time():
-    now = datetime.now()
+    now = datetime.datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
     return dt_string
 
@@ -49,6 +49,9 @@ def validate(keys, dict):
 
     :return:    True on OK, False on bad params
     '''
+    if dict == None:
+        return False
+
     for key in keys:
         if key in dict.keys():
             if not bool(dict[key]):
@@ -109,7 +112,7 @@ def compare_password(username, raw_password, db=users_db):
     else:
         return False
 
-'''To be deprecated soon'''
+
 def token_exists(token):
     '''
     Cycles through list of tokens
@@ -118,22 +121,34 @@ def token_exists(token):
     :param token:      token to check
     :return:           True if token exists, else: False
     '''
-    for token in tokens:
-        if token["token"] == token:
-            return True
+    if token in tokens:
+        return True
+    else:
+        return False
 
-    return False
 
-'''To be decrecated soon'''
 def delete_tokens(token):
     '''
     Deletes a single token
 
     :param token:       token key to delete
     '''
-    for i in range(len(tokens)):
-        if tokens[i]["token"] == token:
-            del tokens[i]
+    if token in tokens.keys():
+        del tokens[token]
+        return True
+
+    return False
+
+
+def get_balance(token, db=users_db):
+    username = tokens[token]["username"]
+
+    UserQuery = Query()
+    user = db.search(UserQuery.username == username)
+    user = user[0]
+
+    return user["balance"]
+
 
 
 def generate_token(username):
@@ -150,16 +165,9 @@ def generate_token(username):
 
     user_token = "".join(user_token)
 
-    token_entry = {"username": username, "token": user_token}
+    tokens[user_token] = {"username": username, "expires": datetime.datetime.now() + datetime.timedelta(hours=1)}
 
-    for i in range(len(tokens)):
-        if tokens[i]["username"] == username:
-            print(f"Removing old token for {username}")
-            del tokens[i]
-
-    tokens.append(token_entry)
-
-    print(tokens)
+    print(tokens[user_token])
     return user_token
 
 

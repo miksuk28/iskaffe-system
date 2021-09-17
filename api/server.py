@@ -107,7 +107,7 @@ def sign_out():
 @app.route("/get_ip", methods=["GET"])
 def get_ip():
     if request.method == "GET":
-        ip = get_ip(request.headers)
+        ip = ops.get_ip(request.headers)
         
         ops.log_action(f"{ip} - /get_ip")
         print(ip)
@@ -120,18 +120,35 @@ def get_ip():
 @app.route("/get_balance", methods=["GET"])
 def get_balance():
     if request.method == "GET":
-        token = request.args.get("token")
+        token = request.headers["token"]
 
         if token == "" or token == None:
             print("No token provided")
             abort(405, "No token provided")
         else:
-            print(token)
+            if ops.token_exists(token):
+                balance = ops.get_balance(token)
+
+                jsonify({"balance": balance})
+            else:
+                abort(404, message="Token does not exist")
 
         return jsonify({"token": token})
     else:
-        abort(405, message="Method not allowed")
+        abort(405, "Method not allowed")
 
+
+'''DEBUG ONLY REMOVE WHEN NOT NEEDED'''
+@app.route("/tokens", methods=["GET", "POST"])
+def get_tokens():
+    if request.method == "GET" or "POST":
+        print(ops.tokens)
+        print(request.headers)
+
+        return jsonify({"message": "OK"})
+    else:
+        abort(405, message="Method not allowed")
+'''END DEBUG STUFF'''
 
 if __name__ == "__main__":
     ops.log_action("----- SERVER STARTED -----")

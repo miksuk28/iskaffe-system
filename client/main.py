@@ -105,6 +105,15 @@ def get_data():
     ]
 
 
+def main_window():
+    layout = [
+        [sg.Frame("Balance"), [sg.Text("Gaming")]]
+    ]
+
+    window = sg.Window("Test window", layout)
+
+
 if __name__ == "__main__":
     login_window()
+    main_window()
     print(credentials)
