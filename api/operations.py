@@ -6,13 +6,11 @@ into more modules
 
 from random import choice
 import hashlib
-import uuid
 import datetime
 # TinyDB
 from tinydb import TinyDB, Query
 
 users_db = TinyDB("users.json")
-
 
 ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 SYMBOLS = "!#¤%&/()=?-.,"
