@@ -145,6 +145,7 @@ def get_balance(token, db=users_db):
     user = db.search(UserQuery.username == username)
     user = user[0]
 
+    print(user)
     return user["balance"]
 
 
@@ -194,5 +195,5 @@ def add_user(user, db=users_db):
     password = hash_password(user["password"], salt)
 
     new_user = {"fname": user["fname"], "lname": user["lname"],
-                "username": user["username"], "password": password, "salt": salt}
+                "username": user["username"], "password": password, "salt": salt, "balance": 0}
     db.insert(new_user)

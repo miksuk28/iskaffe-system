@@ -108,7 +108,7 @@ def sign_out():
 def get_ip():
     if request.method == "GET":
         ip = ops.get_ip(request.headers)
-        
+
         ops.log_action(f"{ip} - /get_ip")
         print(ip)
         return jsonify({"ip": ip})
@@ -124,21 +124,22 @@ def get_balance():
 
         if token == "" or token == None:
             print("No token provided")
-            abort(405, "No token provided")
+            abort(400, "No token provided")
         else:
             if ops.token_exists(token):
                 balance = ops.get_balance(token)
 
-                jsonify({"balance": balance})
+                return jsonify({"balance": balance})
             else:
-                abort(404, message="Token does not exist")
+                abort(400, "Token does not exist")
 
-        return jsonify({"token": token})
     else:
         abort(405, "Method not allowed")
 
 
 '''DEBUG ONLY REMOVE WHEN NOT NEEDED'''
+
+
 @app.route("/tokens", methods=["GET", "POST"])
 def get_tokens():
     if request.method == "GET" or "POST":
@@ -148,6 +149,8 @@ def get_tokens():
         return jsonify({"message": "OK"})
     else:
         abort(405, message="Method not allowed")
+
+
 '''END DEBUG STUFF'''
 
 if __name__ == "__main__":
